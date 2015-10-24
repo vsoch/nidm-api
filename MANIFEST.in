@@ -1,0 +1,2 @@
+recursive-include nidm-api/templates *
+recursive-include nidm-spi/static *
