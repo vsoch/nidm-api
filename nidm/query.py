@@ -6,8 +6,12 @@ data structures for nidm-queries
 '''
 
 import os
+import stat
 import uuid
+import json
 import rdflib
+import shutil
+import tempfile
 import rdfextras
 rdfextras.registerplugins()
 import sys
@@ -16,8 +20,10 @@ if sys.version_info[0] < 3:
 else:
     from io import StringIO
 from git import Repo
+from glob import glob
 from pandas import DataFrame
-from nidm.utils import load_json, get_query_template, has_internet_connectivity
+from nidm.utils import load_json, get_query_template, has_internet_connectivity, \
+find_directories, set_permissions
 
 def generate_query_template(output_dir=None,template_path=None,fields=None):
     '''generate_query_template
@@ -52,9 +58,9 @@ def generate_query_template(output_dir=None,template_path=None,fields=None):
     #TODO: if a sparql query is provided, we should generate parameters from it
     #TODO: template validation
     if fields != None:    
-    for key,value in fields.iteritems():
-        if key in template:
-           template[key] = value
+        for key,value in fields.iteritems():
+           if key in template:
+              template[key] = value
 
     # the user wants to save to file
     if output_dir != None:
@@ -93,22 +99,126 @@ def do_query(ttl_file,query,rdf_format="turtle",serialize_format="csv",output_df
         return result
 
 
-def update_queries():
-    '''update_queries:
-    controls checking for queries repo to user home directory
-    and downloads updated version if there is internet connectivity
+def make_lookup(query_list,key_field):
+    '''make_lookup
+    returns dict object to quickly look up query based on uid
+    Parameters
+    ==========
+    query_list: list 
+        a list of query (dict objects)
+    key_field: str
+        the key in the dictionary to base the lookup key
+    Returns
+    =======
+    query_dict: dict
+        dict (json) with key as "key_field" from query_list 
     '''
-    # Check for queries folder in user home directory
-    home_dir = os.environ["HOME"]
-    nidm_dir = "%s/.nidmapi" %home_dir
-    if not os.path.exists("%s/.nidm" %home_dir):
-        os.mkdir(nidm_dir)
+    lookup = dict()
+    for single_query in query_list:
+        lookup_key = single_query[key_field]
+        lookup[lookup_key] = single_query
+    return lookup
+
+def validate_queries(query_dir,queries=None):
+    '''validate_queries
+    returns json object with query data structures, and
+    a field 'valid' to describe if query was valid
+    Parameters
+    ==========
+    queries: list 
+        a list of full paths to json files, each a query
+    query_dir: str
+        full path to a nidm-query repo
+    Returns
+    =======
+    queries: json
+        dict (json) with all read in queries available
+    from nidm-query, provided by API
+    '''
+    #TODO: validation should include testing sparql,
+    # as well as if fields possible to return are
+    # possible given the query. It would be more ideal
+    # to remove these "hard coded" options and have them
+    # derived directly from the query at runtime
+    if queries == None:
+        query_folders = find_directories(query_dir)
+        query_paths = find_queries(query_folders)
+    queries = read_queries(query_paths)
+    #TODO: need to decide how to validate :)
+    return queries
+
+
+def get_query_directory(tmpdir=None):
+    '''get_query_directory:
+    Download queries repo to tmp directory
+    Parameters
+    ==========
+    tmpdir: str
+        path to directory to download queries to
+    '''
+    if tmpdir == None:
+        tmpdir = tempfile.mkdtemp()
     # Check for internet connection
     if has_internet_connectivity():
-        download_queries("%s/.nidm" %homedir)  
+        print "Updating queries at %s" %(tmpdir)
+        download_queries(tmpdir)  
+    return tmpdir
+
+def find_queries(query_folders,search_pattern="*.json"):
+    '''find_queries
+    searches one or more folders for valid queries, meaning
+    json files. In the case of multiple directories, will
+    append the folder name as a variable to indicate the type
+    Parameters
+    ==========
+    query_folders: list or str
+        one or more full paths to directories with json objects
+    search_pattern: str
+        pattern for glob to use to find query objects
+        default is "*.json"
+    Returns
+    =======
+    queries: list
+        a list of full paths to query object files
+    '''
+    queries = []
+    if isinstance(query_folders,str):
+        query_folders = [query_folders]
+    for query_folder in query_folders:
+        queries = queries + glob("%s/%s" %(query_folder,search_pattern))
+    return queries
 
 
-# Currently hard coded for queries, if we have more
+def read_queries(query_paths):
+    '''read_queries
+    Read in a list of query (json) objects.
+    Parameters
+    ==========
+    query_paths: list
+    a list of full paths to query objects to read
+    Returns
+    =======
+    queries_: list
+        dict to be served as json describing queries available
+        a "type" variable is added to indicate folder query was found in
+    '''
+    queries = []
+    for query_path in query_paths:
+        ext = os.path.splitext(query_path)[1]
+        if ext == ".json":
+            query_type = query_path.split("/")[-2]
+            uid = query_path.split("/")[-1].replace(ext,"")
+            tmp = json.load(open(query_path,"rb"))
+            # sparql should be joined into single string
+            tmp["sparql"] = "\n".join(tmp["sparql"])  
+            tmp["type"] = query_type
+            tmp["uid"] = uid    
+            queries.append(tmp)
+        else:
+            print "Skipping file %s, extension is not .json" %(query_path)
+    return queries
+
+# Currently hard coded for query repo, if we have more
 # data types can be changed to a variable
 def download_queries(destination):
     '''download_queries
@@ -118,4 +228,5 @@ def download_queries(destination):
     destination:
        the full path to download the repo to
     '''
-    return Repo.clone_from("https://github.com/incf-nidash/nidm-queries",destination)
+    repo = Repo.clone_from("https://github.com/incf-nidash/nidm-query.git",destination)
+    return repo

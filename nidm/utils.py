@@ -5,6 +5,8 @@ general functions for the api
 '''
 
 import os
+import re
+import stat
 import json
 import rdflib
 import urllib2
@@ -174,7 +176,16 @@ def has_internet_connectivity():
     retrieve google IP address. Returns True/False
     """
     try:
-        response=urllib2.urlopen('http://74.125.228.100',timeout=1)
+        response=urllib2.urlopen('http://www.google.com',timeout=1)
         return True
     except urllib2.URLError as err: pass
     return False
+
+def set_permissions(path,permission=stat.S_IWRITE):
+    os.chmod(path,stat.S_IWRITE)
+    for file_ in os.listdir(path):
+        filePath = os.path.join(path,file_)
+        if os.path.isdir(filePath):
+            set_permissions(filePath)
+        else:
+            os.chmod(filePath,permission)

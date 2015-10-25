@@ -21,21 +21,15 @@ The main python module contains scripts that are organized by the associated NID
  - [nidmapi/results.py](nidmapi/results.py): nidm results functions
  - [nidmapi/workflow.py](nidmapi/workflow.py): nidm workflow functions
 
-Nothing is yet developed fully enough for testing, this is simply a skeleton.
-
 
 #### Documentation
 
-Documentation will be provided to answer the following questions:
+Documentation will be provided soon.
 
-#### How do I use this as a REST API?
+#### Quick Answers
+
+##### How do I use this as a REST API?
 You have several options. By installing the [nidm-api](https://github.com/incf-nidash/nidm-api) you will have a command line tool to immediately serve a localhost version of the REST API.  You could easily run this executable on a server to provide it to a larger group of people. We will also (likely) find a place to serve this officially.
 
-##### How do I contribute a new query?
-We will have a function in this API executable to generate a new data structure for adding to [nidm-queries](https://github.com/incf-nidash/nidm-queries). This will work via command line, or via a web interface for you to input fields for your structure. We recommend that you use the generation functions to ensure accuracy in the format and fields of your data structure. You can then add it to the repo by submitting a pull request to add it. A pull request affords group discussion, and we will eventually have continuous integration that will run tests on your new query.
-
-#### How do I integrate queries into my application?
+##### How do I integrate queries into my application?
 While this API is an executable, it is also a collection of functions organized around the different NIDM objects. You can easily import the same functions to perform the queries into your applications to use them without needing to get them via the REST API.
-
-More documentation and details will come, for now it's time to code!
-
