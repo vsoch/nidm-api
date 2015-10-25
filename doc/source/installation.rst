@@ -6,6 +6,7 @@ To install
 ::
 
 
-      pip install git+git:///incf-nidash:nidm-api.git
+      pip install git+git://github.com/incf-nidash/nidm-api.git
+
 
 
