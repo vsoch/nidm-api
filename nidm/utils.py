@@ -7,6 +7,7 @@ general functions for the api
 import os
 import json
 import rdflib
+import urllib2
 import __init__
 import StringIO
 import pandas as pd
@@ -41,15 +42,6 @@ def get_installdir():
        returns installation directory of nidm-api
     '''
     return os.path.dirname(os.path.abspath(__init__.__file__))
-
-
-def update_queries(home_path):
-    '''update_queries:
-    downloads current queries repo to user home directory
-    this is equivalent to nltk data
-    '''
-    print "WRITE ME"
-
 
 def find_subdirectories(basepath):
     '''Return directories (and sub) starting from a base
@@ -174,3 +166,15 @@ def clean_fields(mydict):
         else:
             newdict[cleanfield] = value.encode("utf-8")
     return newdict
+
+
+def has_internet_connectivity():
+    """has_internet_connectivity
+    Checks for internet connectivity by way of trying to
+    retrieve google IP address. Returns True/False
+    """
+    try:
+        response=urllib2.urlopen('http://74.125.228.100',timeout=1)
+        return True
+    except urllib2.URLError as err: pass
+    return False

@@ -1,6 +1,21 @@
+from setuptools.command.install import install as _install
 from setuptools import setup, find_packages
 import codecs
+import sys
 import os
+
+# We will run script to download data after install
+def _post_install(dir):
+    from subprocess import call
+    call([sys.executable, 'update_queries.py'],
+         cwd=os.path.join(dir, 'nidm','script'))
+
+class install(_install):
+    def run(self):
+        _install.run(self)
+        self.execute(_post_install, (self.install_lib,),
+                     msg="Downloading nidm-queries...")
+
 
 here = os.path.abspath(os.path.dirname(__file__))
 
@@ -10,7 +25,7 @@ with codecs.open(os.path.join(here, 'README.md'), encoding='utf-8') as f:
 
 setup(
     # Application name:
-    name="nidmapi",
+    name="nidm",
 
     # Version number (initial):
     version="1.0.0",
@@ -38,8 +53,10 @@ setup(
 
     entry_points = {
         'console_scripts': [
-            'nidmapi=nidmapi.scripts:main',
+            'nidm=nidm.scripts:main',
         ],
     },
 
+    # This will install an updated version of nidm-queries in home
+    cmdclass={'install': install},
 )

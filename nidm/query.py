@@ -15,9 +15,9 @@ if sys.version_info[0] < 3:
     from StringIO import StringIO
 else:
     from io import StringIO
+from git import Repo
 from pandas import DataFrame
-from nidmapi.utils import load_json, get_query_template
-
+from nidm.utils import load_json, get_query_template, has_internet_connectivity
 
 def generate_query_template(output_dir=None,template_path=None,fields=None):
     '''generate_query_template
@@ -91,3 +91,31 @@ def do_query(ttl_file,query,rdf_format="turtle",serialize_format="csv",output_df
         return DataFrame.from_csv(result,sep=",")
     else:
         return result
+
+
+def update_queries():
+    '''update_queries:
+    controls checking for queries repo to user home directory
+    and downloads updated version if there is internet connectivity
+    '''
+    # Check for queries folder in user home directory
+    home_dir = os.environ["HOME"]
+    nidm_dir = "%s/.nidmapi" %home_dir
+    if not os.path.exists("%s/.nidm" %home_dir):
+        os.mkdir(nidm_dir)
+    # Check for internet connection
+    if has_internet_connectivity():
+        download_queries("%s/.nidm" %homedir)  
+
+
+# Currently hard coded for queries, if we have more
+# data types can be changed to a variable
+def download_queries(destination):
+    '''download_queries
+    Download queries repo to a destination
+    Parameters
+    ==========
+    destination:
+       the full path to download the repo to
+    '''
+    return Repo.clone_from("https://github.com/incf-nidash/nidm-queries",destination)
