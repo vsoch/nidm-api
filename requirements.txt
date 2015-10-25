@@ -1,0 +1,6 @@
+numpy
+flask
+gitpython
+rdflib
+rdfextras
+flask-restful

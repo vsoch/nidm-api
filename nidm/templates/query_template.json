@@ -1,0 +1,20 @@
+{
+        "title": "This is a title of the query",
+        "description": "This is the description of your query",
+        "uid":"XXXXXXXXXXXXXXXXXXXX",
+        "creator": "<http://orcid.org/0000-0003-1099-3328>",
+        "keyword": "select all, meta",
+        "model": "meta", 
+        "parameters": ["?title", "?description", "?creator", "?creator", "?model", "?parameters", "?reference","?notes"],
+        "sparql": ["PREFIX dcat: <http://www.w3.org/ns/dcat#>",
+                   "PREFIX nidm: <http://purl.org/nidash/nidm#>",
+                   "SELECT DISTINCT ?t1_uri ?task",
+                    "WHERE {",                    
+                       "?uri a nidm:MRIAnatomicalT1 ;",
+                       "dcat:downloadURL ?t1_uri ;",
+                       "dcat:format nidm:NIFTI1Gzip .",
+                       "VALUES (?task) {('tasks.fs_reconall')}}"],
+        "reference": "",
+        "@context":""
+    
+}
