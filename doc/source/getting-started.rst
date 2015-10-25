@@ -46,6 +46,25 @@ The only difference is that we've added the "query" to the URL, and specified th
 Note that I gave the REST API a local path on my computer. We can also give it a URL and it will work.
 
 
+::
+
+
+    http://localhost:8088/api/query/7950f524-90e8-4d54-ad6d-7b22af2e895d?ttl=https://rawgithub.com/incf-nidash/nidm-api/master/example/nidm.ttl
+    
+
+Boum.
+
+
+If you screw something up, meaning that the query did not work for any reason (e.g., you gave it a wrong file, improperly formatted file, or the query logic has an error), it will tell you:
+
+
+.. image:: _static/img/getting-started/screwUp.png
+
+
+Note that the current (tiny) set of queries is currently not being validated, and they need work and contribution.
+
+
+
 REST API on Server
 ''''''''''''''''''
 You can use something like gunicorn to run the flask application on a server, for the world to use. More documentation on how to do this will come, as we currently do not have a server to host this. Please be aware that the debug mode in the Flask application is set to True, and you should `read about <http://flask.pocoo.org/docs/0.10/deploying/
