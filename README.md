@@ -2,6 +2,8 @@
 
 * under development *
 
+[documentation](http://nidm-api.readthedocs.org/)
+
 This is an application to query and visualize nidm data structures, including workflow, experiment, and results. This repo contains a python module that can serve as a standalone application to work with [nidm-queries](https://github.com/incf-nidash/nidm-queries).
 
 Functions will be provided to do the following:
@@ -9,6 +11,30 @@ Functions will be provided to do the following:
 - perform a query on an NIDM turtle file, returning the format of your choice (text and graphical)
 - a web interface to generate a new query to add to the database
 - validation of query data structures
+
+#### Installation
+
+      pip install git+git://github.com/incf-nidash/nidm-api.git
+
+#### Quick Start
+To start the server:
+
+      nidm
+      
+See all valid queries at localhost:8088. To see a single query:
+
+
+      localhost:8088/api/7950f524-90e8-4d54-ad6d-7b22af2e895d
+
+
+Do a query:
+
+      http://localhost:8088/api/query/7950f524-90e8-4d54-ad6d-7b22af2e895d?ttl=https://rawgithub.com/incf-nidash/nidm-api/master/example/nidm.ttl
+    
+
+#### Documentation
+Please see [getting started](http://nidm-api.readthedocs.org/en/latest/getting-started.html) for how to run a local REST API, a server REST API, or use the module functions in your application to perform queries on NIDM results, workflow, and experiment data structures. We will be providing complete documentation at [readthedocs](http://nidm-api.readthedocs.org/)
+
 
 #### Organization
 The main python module contains scripts that are organized by the associated NIDM data structure, and you should follow the following convention:
@@ -21,10 +47,6 @@ The main python module contains scripts that are organized by the associated NID
  - [nidmapi/results.py](nidmapi/results.py): nidm results functions
  - [nidmapi/workflow.py](nidmapi/workflow.py): nidm workflow functions
 
-
-#### Documentation
-
-Documentation will be provided soon.
 
 #### Quick Answers
 

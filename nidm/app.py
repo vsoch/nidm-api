@@ -58,7 +58,7 @@ class apiDoQuery(Resource):
                 "result": result}
         except:
             return {"message": "invalid input for query type.",
-                    quid: app.query_dict[qid]}
+                    qid: app.query_dict[qid]}
 
               
 # Add all resources
