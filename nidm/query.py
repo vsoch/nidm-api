@@ -25,6 +25,16 @@ from pandas import DataFrame
 from nidm.utils import load_json, get_query_template, has_internet_connectivity, \
 find_directories, set_permissions
 
+class Queries():
+
+    def __init__(self,components=["experiment","results","workflow"]):
+        self.store = get_query_directory() 
+        if isinstance(components,str):
+            components = [components]
+        self.queries = validate_queries(self.store,components=components)
+        self.query_dict = make_lookup(self.queries,key_field="uid")
+
+
 def generate_query_template(output_dir=None,template_path=None,fields=None):
     '''generate_query_template
     Parameters
@@ -122,7 +132,7 @@ def make_lookup(query_list,key_field):
         lookup[lookup_key] = single_query
     return lookup
 
-def validate_queries(query_dir,queries=None):
+def validate_queries(query_dir,queries=None,components=["results","experiment","workflow"]):
     '''validate_queries
     returns json object with query data structures, and
     a field 'valid' to describe if query was valid
@@ -132,12 +142,21 @@ def validate_queries(query_dir,queries=None):
         a list of full paths to json files, each a query
     query_dir: str
         full path to a nidm-query repo
+    folders: folders to include corresponding to nidm 
+        data structure subtypes (results, experiment, workflow)
     Returns
     =======
     queries: json
         dict (json) with all read in queries available
     from nidm-query, provided by API
     '''
+    component_folders = []
+    if isinstance(components,str):
+        components = [components]
+    for folder in components:
+        if folder in ["results","experiment","workflow"]:   
+            component_folders.append("%s/%s" %(query_dir,folder))
+
     #TODO: validation should include testing sparql,
     # as well as if fields possible to return are
     # possible given the query. It would be more ideal
@@ -145,6 +164,8 @@ def validate_queries(query_dir,queries=None):
     # derived directly from the query at runtime
     if queries == None:
         query_folders = find_directories(query_dir)
+        if len(component_folders) > 0:
+            query_folders = [q for q in query_folders if q in component_folders]
         query_paths = find_queries(query_folders)
     queries = read_queries(query_paths)
     #TODO: need to decide how to validate :)
