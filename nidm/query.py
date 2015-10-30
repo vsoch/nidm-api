@@ -14,8 +14,6 @@ import numpy
 import rdflib
 import shutil
 import tempfile
-import rdfextras
-rdfextras.registerplugins()
 import sys
 if sys.version_info[0] < 3:
     from StringIO import StringIO
