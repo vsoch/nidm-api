@@ -4,6 +4,9 @@ import codecs
 import sys
 import os
 
+reqs = [line.strip() for line in open('requirements.txt').readlines()]
+requirements = list(filter(None, reqs))
+
 # Post install script, if needed
 def _post_install(dir):
     from subprocess import call
@@ -49,7 +52,7 @@ setup(
     long_description=long_description,
     keywords='nidm neuroscience',
 
-    install_requires = ['numpy','Flask','gitpython'],
+    install_requires = requirements,
 
     entry_points = {
         'console_scripts': [
