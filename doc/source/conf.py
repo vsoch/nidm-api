@@ -12,7 +12,7 @@
 # All configuration values have a default; values that are commented out
 # serve to show the default.
 
-from unittest.mock import MagicMock
+from mock import MagicMock
 import sys
 import os
 import shlex
