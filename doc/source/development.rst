@@ -3,7 +3,47 @@ Development
 
 How do I contribute a new query?
 --------------------------------
-We will have a function in this API executable to generate a new data structure for adding to `nidm-query <https://github.com/incf-nidash/nidm-query>`_. This will work via command line, or via a web interface for you to input fields for your structure. We recommend that you use the generation functions to ensure accuracy in the format and fields of your data structure. You can then add it to the repo by submitting a pull request to add it. A pull request affords group discussion, and we will eventually have continuous integration that will run tests on your new query.
+We have a dynamic web interface that will allow you to generate, preview (and eventually test) a new data structure for adding to `nidm-query <https://github.com/incf-nidash/nidm-query>`_. This can also be done, using the same functions, programatically. You can then add it to the repo by submitting a pull request to add it. A pull request affords group discussion, and we will eventually have continuous integration that will run tests on your new query. We recommend that you use the generation functions to ensure accuracy in the format and fields of your data structure. 
+
+Web Query Generator
+'''''''''''''''''''
+
+To generate a query with the interactive web interface, first start up the nidm application
+
+::
+
+    nidm
+
+Then open your browser to localhost:8088/query/new. You will be presented with fields to fill in for your query:
+
+
+.. image:: _static/img/development/queryField.png
+
+
+- title: This should be a single sentence that describes what your query does, what object model it is associated with, etc.
+- creator: We ask for your ORCID ID to be filled into the creator spot. If you don't have this, you can put a name or email. We are currently not validating this, so you can really do whatever you like. We will (hopefully) decide on a standard.
+- description: This should be a text description of your query, please give details. The title and description will eventually be provided in a static web interface served with the repo for people to search and find queries they want to use.
+
+When you click next, the next page is where you should copy paste your sparql:
+
+
+.. image:: _static/img/development/querySparql.png
+
+
+If you are not ready to generate your file, you can click "Preview" for a new tab to open with the query. The parameters that the user is allowed to ask for will be extracted from your "select" line, indicated by a word preceded with ? (e.g., ?hello). Do not worry about capitalization. 
+
+.. image:: _static/img/development/queryPreview.png
+
+When you are ready to save your query, click "Create!"
+
+.. image:: _static/img/development/queryDownload1.png
+
+A file will be downloaded to your computer. You should drop this file into the appropriate directory in your `nidm-query <https://github.com/incf-nidash/nidm-query>`_. repo and submit a PR to add it to the nidm-api. We will eventually have tests for the queries, and an interactive web interface hosted with the nidm-api to explore the queries available (before downloading the nidm-api).
+
+.. image:: _static/img/development/queryDownload2.png
+
+You can then download to your local machine:
+
 
 
 How do I develop the API?

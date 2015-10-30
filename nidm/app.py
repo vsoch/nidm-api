@@ -1,8 +1,9 @@
-from nidm.query import get_query_directory, validate_queries, make_lookup, do_query
-from flask import Flask, render_template, request
+from nidm.query import get_query_directory, validate_queries, make_lookup, do_query, generate_query_template
+from flask import Flask, render_template, request, jsonify, make_response
 from flask_restful import Resource, Api
 from werkzeug import secure_filename
 import tempfile
+import json
 import shutil
 import random
 import os
@@ -73,9 +74,32 @@ def newQuery():
     return render_template('query/new.html')
 
 
-@app.route('/query/add')
-def addQuery():
-    return render_template('query/add.html')
+@app.route('/query/preview',methods=['POST'])
+def previewQuery():    
+    if request.method == 'POST':
+        fields = dict()
+        for field,value in request.form.iteritems():
+            fields[field] = value
+
+        new_query = generate_query_template(output_dir=None,template_path=None,fields=fields)
+
+    return jsonify(new_query)
+
+
+@app.route('/query/generate',methods=['POST'])
+def generateQuery():    
+    if request.method == 'POST':
+        fields = dict()
+        for field,value in request.form.iteritems():
+            fields[field] = value
+
+        new_query = generate_query_template(output_dir=None,template_path=None,fields=fields)
+
+        # set right header for the response to be downloaded, instead of just printed on the browser
+        response = make_response(json.dumps(new_query, sort_keys=True,indent=4, separators=(',', ': ')))
+        response.headers["Content-Disposition"] = "attachment; filename=%s.json" %(new_query["uid"])
+    return response
+
 
 
 # RUNNING ##########################################################

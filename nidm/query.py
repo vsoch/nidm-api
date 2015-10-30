@@ -6,9 +6,11 @@ data structures for nidm-queries
 '''
 
 import os
+import re
 import stat
 import uuid
 import json
+import numpy
 import rdflib
 import shutil
 import tempfile
@@ -55,12 +57,15 @@ def generate_query_template(output_dir=None,template_path=None,fields=None):
     template["uid"] = uid
 
     # the user has provided data to fill template
-    #TODO: if a sparql query is provided, we should generate parameters from it
     #TODO: template validation
     if fields != None:    
         for key,value in fields.iteritems():
            if key in template:
-              template[key] = value
+              # Parameters are generated from sparql query based on "SELECT" line
+              if key == "sparql":
+                  template["parameters"],template["sparql"] = format_sparql(value)
+              else:
+                  template[key] = value
 
     # the user wants to save to file
     if output_dir != None:
@@ -230,3 +235,23 @@ def download_queries(destination):
     '''
     repo = Repo.clone_from("https://github.com/incf-nidash/nidm-query.git",destination)
     return repo
+
+
+def format_sparql(sparql_text):
+    '''format_sparql
+    split sparql text into a list, and 
+    extract parameter options from select.
+    '''
+    lines = sparql_text.split("\n")
+    lines = [line.strip("\r") for line in lines]
+    params = []
+    # Find any lines with select and extract variables from it
+    expression = re.compile("select")
+    param_expression = re.compile(r"([#?]\w+)\b")
+    for line in lines:
+        if expression.search(line.lower()):
+            if param_expression.search(line):
+                params = params + param_expression.findall(line)
+    params = numpy.unique(params).tolist() 
+    return params,lines
+
