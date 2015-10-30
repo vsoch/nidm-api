@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>DeepDive Application Generator</title>
+
+        <!-- CSS -->
+        <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Roboto:400,100,300,500">
+        <link rel="stylesheet" href="{{ url_for('static',filename='bootstrap/css/bootstrap.min.css') }}">
+        <link rel="stylesheet" href="{{ url_for('static',filename='font-awesome/css/font-awesome.min.css') }}">
+	<link rel="stylesheet" href="{{ url_for('static',filename='css/form-elements.css') }}">
+        <link rel="stylesheet" href="{{ url_for('static',filename='css/style.css') }}">
+
+        <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+        <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+        <!--[if lt IE 9]>
+            <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+            <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+        <![endif]-->
+
+        <!-- Favicon -->
+        <link rel="shortcut icon" href="{{ url_for('static',filename='img/favicon.ico') }}">
+
+    </head>
+
+    <body>
+        <!-- Top menu -->
+	    <nav class="navbar navbar-inverse navbar-no-bg" role="navigation">
+                <div class="container">
+		    <div class="navbar-header">
+                        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#top-navbar-1">
+                            <span class="sr-only">Toggle navigation</span>
+			    <span class="icon-bar"></span>
+			    <span class="icon-bar"></span>
+			    <span class="icon-bar"></span>
+			</button>
+			<a class="navbar-brand" style="height:150px; width:200px" href="index.html">Configure your DeepDive Application</a>
+		    </div>
+	   	    <!-- Collect the nav links, forms, and other content for toggling -->
+		    <div class="collapse navbar-collapse" id="top-navbar-1">
+	                <ul class="nav navbar-nav navbar-right">
+			    <li>
+			        <span class="li-text">Ways to</span> 
+				    <a href="#"><strong> contact</strong></a> 
+				    <span class="li-text"> us:</span> 
+				    <span class="li-social">
+					<a href="#"><i class="fa fa-envelope"></i></a> 
+				    </span>
+			    </li>
+			</ul>
+		    </div>
+                </div>
+	    </nav>
+
+            <!-- Top content -->
+            <div class="top-content">	
+            <div class="inner-bg">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-sm-8 col-sm-offset-2 text">
+                            <h1><strong>NIDM</strong> Query Generator</h1>
+                            <div class="description">
+                            	<p>
+                            	</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-6 col-sm-offset-2 form-box">
+                            <form role="form" action="{{ url_for('generateQuery') }}" method="post" enctype="multipart/form-data" class="registration-form" style="width:750px" id="queryform">
+                                <fieldset>
+		                    <div class="form-top">
+		                        <div class="form-top-left">
+
+
+		                        			<h3>Basics</h3>
+		                            		<p>for your query</p>
+		                        		</div>
+		                        		<div class="form-top-right">
+		                        			<i class="fa fa-database"></i>
+		                        		</div>
+		                            </div>
+		                            <div class="form-bottom">
+				                    	<div class="form-group">
+				                    		<label class="sr-only" for="title">Title</label>
+				                        	<input type="text" name="title" placeholder="Query title..." class="form-title form-control" id="title">
+				                        </div>
+				                        <div class="form-group">
+				                        	<label class="sr-only" for="creator">Creator ORCID ID</label>
+				                        	<input type="text" name="creator" placeholder="Creator ORCID ID (0000-0002-4387-3819)" class="form-orcid-id form-control" id="creator">
+				                        </div>
+				                        <div class="form-group">
+				                        	<label class="sr-only" for="keyword">Keywords</label>
+				                        	<input type="text" name="keyword" placeholder="Keywords..." class="form-keywords form-control" id="keyword">
+				                        </div>
+				                        <div class="form-group">
+				                        	<label class="sr-only" for="reference">Reference</label>
+				                        	<input type="text" name="form-reference" placeholder="References..." class="keywords form-control" id="reference">
+				                        </div>
+				                        <div class="form-group">
+				                        	<label class="sr-only" for="description">Description</label>
+				                        	<textarea name="description" placeholder="This is a description of the query..." 
+				                        				class="description form-control" id="form-description"></textarea>
+				                        </div>
+				                        <button type="button" class="btn btn-next">Next</button>
+				                    </div>
+			                    </fieldset>
+			                   
+			                    <fieldset>
+		                        	<div class="form-top">
+		                        		<div class="form-top-left">
+		                        			<h3>Sparql</h3>
+		                            		<p>Copy paste sparql query here:</p>
+		                        		</div>
+		                        		<div class="form-top-right">
+		                        			<i class="fa fa-code"></i>
+		                        		</div>
+		                            </div>
+		                            <div class="form-bottom">
+
+                                               <div class="row" style="padding-bottom:30px">
+				                    <div class="form-group">
+				                        <label class="sr-only" for="sparql">Sparql</label>
+				                        <textarea name="sparql" placeholder="SELECT DISTINCT ?name ?coordinate ?z_score ?peak_name ?pvalue_uncorrected..." 
+				                        			class="form-sparql form-control" id="sparql"></textarea>
+				                    </div>
+                                               </div>  
+                                                <button type="button" class="btn btn-previous">Previous</button>
+				                <button type="submit" class="btn">Create!</button>
+                                                <button formtarget="_blank" class="btn" type="submit" form="queryform" value="Submit" formaction="{{ url_for('previewQuery') }}">Preview</button>
+				            </div>
+			                </fieldset>
+                                        <!-- Hidden fields to pass to next page-->
+                                        <input name="tmpdir" id="tmpdir" type="hidden" class="form-control">
+		                    </form>
+		                   
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+        </div>
+
+
+        <!-- Javascript -->
+        <script src="{{ url_for('static',filename='js/jquery-1.11.1.min.js') }}"></script>
+        <script src="{{ url_for('static',filename='bootstrap/js/bootstrap.min.js') }}"></script>
+        <script src="{{ url_for('static',filename='js/jquery.backstretch.min.js') }}"></script>
+        <script src="{{ url_for('static',filename='js/retina-1.1.0.min.js') }}"></script>
+        <script src="{{ url_for('static',filename='js/scripts.js') }}"></script>
+        
+        <!--[if lt IE 10]>
+            <script src="{{ url_for('static',filename='js/placeholder.js') }}"></script>
+        <![endif]-->
+
+    <script>
+    $(document).ready(function() {
+      $("#tmpdir").val("{{ tmpdir }}");
+    });
+
+</script>
+
+
+    </body>
+
+</html>

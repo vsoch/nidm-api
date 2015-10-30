@@ -35,7 +35,7 @@ setup(
 
     # Application author details:
     author="NIDM Working Group",
-    author_email="vsochat@stanford.edu",
+    author_email="vsochat@stanford.edu, c.m.j.maumet@warwick.ac.uk",
 
     # Packages
     packages=find_packages(),
@@ -50,7 +50,13 @@ setup(
     license="LICENSE.txt",
     description="Python module and application for running a REST API server to perform queries and visualize graphs with NIDM results, experiments, and workflows.",
     long_description=long_description,
-    keywords='nidm neuroscience',
+    keywords='neuroscience Prov, NIDM, Provenance',
+
+    classifiers=[
+        "Development Status :: 3 - Alpha",
+        "Topic :: Utilities",
+        "License :: OSI Approved :: MIT License",
+    ],
 
     install_requires = requirements,
 
