@@ -68,7 +68,15 @@ api.add_resource(apiDoQuery,'/api/<string:output_format>/<string:qid>')
 
 # WEB INTERFACE VIEWS ##############################################
 
-#TODO will write
+@app.route('/query/new')
+def newQuery():
+    return render_template('query/new.html')
+
+
+@app.route('/query/add')
+def addQuery():
+    return render_template('query/add.html')
+
 
 # RUNNING ##########################################################
 
