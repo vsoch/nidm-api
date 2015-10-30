@@ -1,5 +1,4 @@
 numpy
 flask
 gitpython
-rdflib-jsonld
 flask-restful
