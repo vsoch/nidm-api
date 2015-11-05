@@ -20,8 +20,14 @@ Then open your browser to localhost:8088/query/new. You will be presented with f
 .. image:: _static/img/development/queryField.png
 
 
+Fields
+''''''
+
 - title: This should be a single sentence that describes what your query does, what object model it is associated with, etc.
 - creator: We ask for your ORCID ID to be filled into the creator spot. If you don't have this, you can put a name or email. We are currently not validating this, so you can really do whatever you like. We will (hopefully) decide on a standard.
+- keywords: should be keywords to describe your query.
+- component: should describe the analysis or specific component that your query is for. For example, fmri results. We do not currently have a standard rule for this yet, and will hopefully soon.
+- model: should be one of results, experiment, or workflow. This is currently not validated, and will be when we add a validator to the interface.
 - description: This should be a text description of your query, please give details. The title and description will eventually be provided in a static web interface served with the repo for people to search and find queries they want to use.
 
 When you click next, the next page is where you should copy paste your sparql:

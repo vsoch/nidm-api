@@ -77,7 +77,7 @@
 
 
 		                        			<h3>Basics</h3>
-		                            		<p>for your query</p>
+		                            		<p>for your query <a href="http://nidm-api.readthedocs.org/en/latest/development.html#fields" target="_blank"><i class="fa fa-question"></i></a></p>
 		                        		</div>
 		                        		<div class="form-top-right">
 		                        			<i class="fa fa-database"></i>
@@ -100,6 +100,24 @@
 				                        	<label class="sr-only" for="reference">Reference</label>
 				                        	<input type="text" name="form-reference" placeholder="References..." class="keywords form-control" id="reference">
 				                        </div>
+				                        <div class="form-group">
+				                        	<label class="sr-only" for="component">Component</label>
+				                        	<input type="text" name="component" placeholder="Component" class="form-component form-control" id="component">
+				                        </div>
+				                        <div class="form-group">
+				                        	<label class="sr-only" for="format">Format</label>
+				                        	<input type="text" name="format" placeholder="Format (ask)" class="form-format form-control" id="format">
+				                        </div>
+				                        <div class="form-group">
+				                        	<label class="sr-only" for="model">Model</label>
+				                        	<input type="text" name="model" placeholder="Model (results)(experiment)(workflow)" class="form-model form-control" id="model">
+  				                        </div>
+		                                        <div class="form-group">
+		                                            <label class="sr-only" for="version">Version</label>
+		                                                <select name="version" class="form-version form-control">
+		                                                    <option value="1.1.0">1.1.0</option>
+                                                                </select>
+		                                        </div>
 				                        <div class="form-group">
 				                        	<label class="sr-only" for="description">Description</label>
 				                        	<textarea name="description" placeholder="This is a description of the query..." 

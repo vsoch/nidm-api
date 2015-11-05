@@ -72,6 +72,8 @@ def generate_query_template(output_dir=None,template_path=None,fields=None):
               # Parameters are generated from sparql query based on "SELECT" line
               if key == "sparql":
                   template["parameters"],template["sparql"] = format_sparql(value)
+              if key == "model":
+                  template[key] = value.lower()
               else:
                   template[key] = value
 
@@ -132,7 +134,7 @@ def make_lookup(query_list,key_field):
         lookup[lookup_key] = single_query
     return lookup
 
-def validate_queries(query_dir,queries=None,components=["results","experiment","workflow"]):
+def validate_queries(query_dir,queries=None,components=["sparql"]):
     '''validate_queries
     returns json object with query data structures, and
     a field 'valid' to describe if query was valid
@@ -142,8 +144,8 @@ def validate_queries(query_dir,queries=None,components=["results","experiment","
         a list of full paths to json files, each a query
     query_dir: str
         full path to a nidm-query repo
-    folders: folders to include corresponding to nidm 
-        data structure subtypes (results, experiment, workflow)
+    components: folders to include corresponding to nidm 
+        query language (currently only option is sparql)
     Returns
     =======
     queries: json
@@ -154,7 +156,7 @@ def validate_queries(query_dir,queries=None,components=["results","experiment","
     if isinstance(components,str):
         components = [components]
     for folder in components:
-        if folder in ["results","experiment","workflow"]:   
+        if folder in ["sparql"]:   
             component_folders.append("%s/%s" %(query_dir,folder))
 
     #TODO: validation should include testing sparql,
