@@ -72,8 +72,6 @@ def generate_query_template(output_dir=None,template_path=None,fields=None):
               # Parameters are generated from sparql query based on "SELECT" line
               if key == "sparql":
                   template["parameters"],template["sparql"] = format_sparql(value)
-              if key == "model":
-                  template[key] = value.lower()
               else:
                   template[key] = value
 
